@@ -4,7 +4,28 @@
 > 宏可以分为两大类：文本替换宏系统和语法宏系统。在我看来，它们分别相当于搜索替换和代码即数据两个类别。
 
 
-## 在最后一章宏系统中，最终的代码有一个问题，即宏函数多次调用时，参数仍然是第一次调用时的参数。
+## 语法宏系统
+```
+let unless = macro(condition, consequence, alternative) { quote(if (!(unquote(condition))) { unquote(consequence); } else { unquote(alternative); }); };
+
+unless(1>0, puts("not great"), puts("great"));
+
+let m = macro(a) { quote(unquote(a) + unquote(a)); };
+m(5)
+
+Lexer:
+use lexer to find macro keyword from source program like "macro(){...}" 
+
+Parser:
+use parser to generate AST structure like MacroLiterl and FunctionLiteral and CallExpression 
+
+Macro Replacement:
+1. use DefineMacros() get MacroLiterals, and use addMacros() add object.Macro{} to env 
+2. use ExpandMacros() to replacement
+```
+
+
+## 在最后一章语法宏系统中，最终的代码有一个问题，即宏函数多次调用时，参数仍然是第一次调用时的参数。
 
 ### 例如：
 ```
